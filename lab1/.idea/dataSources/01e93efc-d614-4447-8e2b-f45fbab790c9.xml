@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="identifier.sqlite">
+  <database-model serializer="dbm" dbms="SQLITE" family-id="SQLITE" format-version="4.16">
+    <root id="1">
+      <ServerVersion>3.25.1</ServerVersion>
+    </root>
+    <schema id="2" parent="1" name="main">
+      <Current>1</Current>
+    </schema>
+    <collation id="3" parent="1" name="BINARY"/>
+    <collation id="4" parent="1" name="NOCASE"/>
+    <collation id="5" parent="1" name="RTRIM"/>
+    <table id="6" parent="2" name="departments"/>
+    <table id="7" parent="2" name="employees"/>
+    <table id="8" parent="2" name="positions"/>
+    <table id="9" parent="2" name="sqlite_master">
+      <System>1</System>
+    </table>
+    <table id="10" parent="2" name="staffingTable"/>
+    <column id="11" parent="6" name="depId">
+      <Position>1</Position>
+      <DataType>integer|0s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="12" parent="6" name="depName">
+      <Position>2</Position>
+      <DataType>varchar|0s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="13" parent="6" name="sqlite_autoindex_departments_1">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>depName</ColNames>
+      <ColumnCollations></ColumnCollations>
+      <Unique>1</Unique>
+    </index>
+    <key id="14" parent="6">
+      <ColNames>depId</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="15" parent="6">
+      <ColNames>depName</ColNames>
+      <UnderlyingIndexName>sqlite_autoindex_departments_1</UnderlyingIndexName>
+    </key>
+    <column id="16" parent="7" name="personnelNumber">
+      <Position>1</Position>
+      <DataType>integer(6)|0s</DataType>
+    </column>
+    <column id="17" parent="7" name="name">
+      <Position>2</Position>
+      <DataType>varchar(50)|0s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="18" parent="7" name="passportData">
+      <Position>3</Position>
+      <DataType>varchar(100)|0s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="19" parent="7" name="sex">
+      <Position>4</Position>
+      <DataType>char(1)|0s</DataType>
+      <DefaultExpression>&apos;ж&apos;</DefaultExpression>
+    </column>
+    <column id="20" parent="7" name="birthDate">
+      <Position>5</Position>
+      <DataType>date|0s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="21" parent="7" name="education">
+      <Position>6</Position>
+      <DataType>varchar(20)|0s</DataType>
+    </column>
+    <column id="22" parent="7" name="department">
+      <Position>7</Position>
+      <DataType>integer(3)|0s</DataType>
+    </column>
+    <column id="23" parent="7" name="position">
+      <Position>8</Position>
+      <DataType>varchar(30)|0s</DataType>
+    </column>
+    <column id="24" parent="7" name="ratesNumber">
+      <Position>9</Position>
+      <DataType>float(3,2 digit)|0s</DataType>
+    </column>
+    <column id="25" parent="7" name="employmentDate">
+      <Position>10</Position>
+      <DataType>date|0s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="26" parent="7" name="address">
+      <Position>11</Position>
+      <DataType>varchar(100)|0s</DataType>
+    </column>
+    <index id="27" parent="7" name="sqlite_autoindex_employees_1">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>personnelNumber</ColNames>
+      <ColumnCollations></ColumnCollations>
+      <Unique>1</Unique>
+    </index>
+    <key id="28" parent="7">
+      <ColNames>personnelNumber</ColNames>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>sqlite_autoindex_employees_1</UnderlyingIndexName>
+    </key>
+    <foreign-key id="29" parent="7">
+      <ColNames>position
+department</ColNames>
+      <RefTableName>staffingTable</RefTableName>
+      <RefColNames>position
+department</RefColNames>
+    </foreign-key>
+    <check id="30" parent="7">
+      <Predicate>ratesNumber*4 in (1,2,3,4,5,6)</Predicate>
+    </check>
+    <check id="31" parent="7">
+      <Predicate>sex = &apos;ж&apos; OR sex = &apos;м&apos;</Predicate>
+    </check>
+    <column id="32" parent="8" name="posId">
+      <Position>1</Position>
+      <DataType>integer|0s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="33" parent="8" name="posName">
+      <Position>2</Position>
+      <DataType>varchar|0s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="34" parent="8" name="salary">
+      <Position>3</Position>
+      <DataType>float|0s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="35" parent="8" name="sqlite_autoindex_positions_1">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>posName</ColNames>
+      <ColumnCollations></ColumnCollations>
+      <Unique>1</Unique>
+    </index>
+    <key id="36" parent="8">
+      <ColNames>posId</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="37" parent="8">
+      <ColNames>posName</ColNames>
+      <UnderlyingIndexName>sqlite_autoindex_positions_1</UnderlyingIndexName>
+    </key>
+    <column id="38" parent="9" name="type">
+      <Position>1</Position>
+      <DataType>text|0s</DataType>
+    </column>
+    <column id="39" parent="9" name="name">
+      <Position>2</Position>
+      <DataType>text|0s</DataType>
+    </column>
+    <column id="40" parent="9" name="tbl_name">
+      <Position>3</Position>
+      <DataType>text|0s</DataType>
+    </column>
+    <column id="41" parent="9" name="rootpage">
+      <Position>4</Position>
+      <DataType>int|0s</DataType>
+    </column>
+    <column id="42" parent="9" name="sql">
+      <Position>5</Position>
+      <DataType>text|0s</DataType>
+    </column>
+    <column id="43" parent="10" name="position">
+      <Position>1</Position>
+      <DataType>integer|0s</DataType>
+    </column>
+    <column id="44" parent="10" name="department">
+      <Position>2</Position>
+      <DataType>integer|0s</DataType>
+    </column>
+    <column id="45" parent="10" name="ratesNumberPerDep">
+      <Position>3</Position>
+      <DataType>integer|0s</DataType>
+    </column>
+    <index id="46" parent="10" name="sqlite_autoindex_staffingTable_1">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>position
+department</ColNames>
+      <ColumnCollations></ColumnCollations>
+      <Unique>1</Unique>
+    </index>
+    <key id="47" parent="10">
+      <ColNames>position
+department</ColNames>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>sqlite_autoindex_staffingTable_1</UnderlyingIndexName>
+    </key>
+    <foreign-key id="48" parent="10">
+      <ColNames>position</ColNames>
+      <RefTableName>positions</RefTableName>
+      <RefColNames>posId</RefColNames>
+    </foreign-key>
+    <foreign-key id="49" parent="10">
+      <ColNames>position
+department</ColNames>
+      <RefTableName>staffingTable</RefTableName>
+      <RefColNames>position
+department</RefColNames>
+    </foreign-key>
+    <foreign-key id="50" parent="10">
+      <ColNames>department</ColNames>
+      <RefTableName>departments</RefTableName>
+      <RefColNames>depId</RefColNames>
+    </foreign-key>
+  </database-model>
+</dataSource>
