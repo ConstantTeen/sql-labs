@@ -1,3 +1,5 @@
+-- не принята
+
 -- Симонов Константин
 -- группа 6103
 -- вариант 9
@@ -13,6 +15,7 @@ create table if not exists departments (
     depId integer primary key not null,
     depName varchar unique not null
 );
+--+
 
 insert into departments(depName)
 values ('Департамент анализа данных, принятия решений и финансовых технологий'),
@@ -26,6 +29,7 @@ create table if not exists positions(
     posName varchar unique not null,
     salary float not null
 );
+--+
 
 insert into positions(posName, salary)
 values ('Директор (генеральный директор, управляющий) предприятия', 100000),
@@ -40,11 +44,14 @@ create table if not exists staffingTable(
     department integer,
     ratesNumberPerDep integer,
     primary key (position,department),
+    foreign key (position,department)
+        references staffingTable(position, department),
     foreign key (position)
         references positions(posId),
     foreign key (department)
         references departments(depId)
 );
+-- зачем вы делаете первичный ключ внешним на эту же таблицу?!
 
 insert into staffingTable(position, department, ratesNumberPerDep)
 values (1,3,123),
@@ -83,12 +90,11 @@ create table if not exists employees(
     foreign key (position,department)
         references staffingTable(position, department)
 );
+--+
 
 
 insert into employees(personnelNumber, name, passportData, sex, birthDate, education, department, position, ratesNumber, employmentDate, address)
-values (1, 'Ольга Михайловна Кирпич', '75121234', 'ж', '2000-06-21', 'ЮУрГУ', 1, 1, 0.5,'2019-06-21','Москва, ул Керченская, д13 кв37'),
-       (2, 'Олег Джеймсович Цаль', '75121235', 'м','2005-06-21', 'ПТУ №2', 3, 1, 0.25,'2019-06-19','Москва, ул Керченская, д2 кв28'),
-       (3, 'Виктор Антонович Капица', '75121236', 'м', '1942-06-21', 'УрФУ', 3, 4, 0.5,'2019-06-20','Москва, ул Керченская, д14 кв88'),
-       (4, 'Громяко Виталий Олегович ', '75121237', 'м', '1943-06-21', 'ЮУрГУ', 4, 2, 1.5,'2019-06-23', 'Москва, ул Максимова, д4, кв1'),
-       (5, 'Деткова Виктория Альбертовна', '75145237', 'ж', '1953-06-21', 'ПТУ №2', 2, 2, 1.0,'2018-06-23', 'Москва, ул Максимова, д4, кв2'),
-       (6, 'Церенщикова Куцаполь Геннадьевна', '75142237', 'ж', '1987-06-21', 'ЮУрГУ', 1, 3, 0.5,'2017-06-23', 'Москва, ул Максимова, д4, кв3');
+values (1, 'Ольга Михайловна Кирпич', '75121234', 'ж', '21.06.1960', 'ЮУрГУ', 1, 1, 0.5,'21.06.2019','Москва, ул Керченская, д13 кв37'),
+       (2, 'Олег Джеймсович Цаль', '75121235', 'м','21.06.1961', 'ПТУ №2', 2, 1, 0.25,'19.06.2019','Москва, ул Керченская, д2 кв28'),
+       (3, 'Виктор Антонович Капица', '75121236', 'м', '21.06.1962', 'УрФУ', 3, 4, 0.5,'20.06.2019','Москва, ул Керченская, д14 кв88'),
+       (4, 'Громяко Виталий Олегович ', '75121237', 'м', '21.06.1963', 'ЮУрГУ', 4, 2, 1.5,'23.06.2019', 'Москва, ул Максимова, д4, кв1');
