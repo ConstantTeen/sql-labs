@@ -10,16 +10,18 @@
 drop view if exists secondDepEmps;
 
 create view secondDepEmps as
-    select * from employees
-        where department = 2;
+select *
+from employees
+where department = 2;
 -- является обновляемым
-insert into secondDepEmps(name)
-    values ('лёша'),
-           ('виталик');
+insert into secondDepEmps(name, passportData, birthDate, employmentDate, department)
+values ('лёша', '75121234', '2000-06-21', '2019-06-21', 2),
+       ('витя', '75123434', '1990-06-11', '2018-05-02', 2);
+-- [SQLITE_ERROR] SQL error or missing database (cannot modify secondDepEmps because it is a view)
 
 update secondDepEmps
-    set name = 'егорка'
-    where personnelNumber > 3;
+set name = 'егорка'
+where personnelNumber > 3;
 
 -- 2. Представление "Образовательный уровень сотрудников" (с указанием
 -- количества людей с высшим, средним и другими уровнями образования), по
@@ -30,49 +32,43 @@ drop view if exists educationLevel;
 create view educationLevel as
 select e.department,
        e.education,
-    (
-        select count(distinct e1.personnelNumber) from employees e1
-            where e1.department = e.department
-                and
-                  e1.sex like 'ж'
-                and
-                  e.education = e1.education
-    ) females,
-    (
-        select count(distinct e1.personnelNumber) from employees e1
-            where e1.department = e.department
-                and
-                  e1.sex like 'м'
-                and
-                  e.education = e1.education
-    ) males
+       count(
+               case
+                   when e.sex like 'м' then 1
+                   else NULL
+                   end
+           ) as males,
+       count(
+               case
+                   when e.sex like 'ж' then 1
+                   else NULL
+                   end
+           ) as females
 from employees e
 group by e.department, e.education;
--- не является обновляемым из-за group by как минимум
-insert into educationLevel
-    values (6, 'что-то', 123,321),
-           (1, 'нечто', 222,11);
 
-update educationLevel
-    set department = 101
-    where males > 3;
+-- не является обновляемым из-за group by как минимум
 
 -- 3. Представление "Вакансии": номер отдела – должность – количество вакантных ставок.
 drop view if exists vacancies;
 
 create view vacancies as
-select department, posName, ratesNumberPerDep from staffingTable
-    left join positions p on
-        staffingTable.position = p.posId
-    order by department;
--- не является обновляемым из-за left join
-insert into vacancies
-    values (1, 'тырыпыры', 123),
-           (123, 'кочерга', 312);
+select d.depId,
+       p.posName,
+       s.ratesNumberPerDep -
+       (
+           select case when sum(e.ratesNumber) is NULL then 0 else sum(e.ratesNumber) end
+           from employees e
+           where e.position = p.posId
+             and e.department = d.depId
+       ) as vacantRates
+from departments d,
+     positions p,
+     staffingTable s
+where s.department = d.depId
+  and s.position = p.posId
+order by d.depId;
+-- не является обновляемым, тк 3е поле - выражение
 
-update vacancies
-    set department = 101
-    where ratesNumberPerDep > 100;
 
--- Для всех попыток использовать UPDATE или INSERT получаю подобную ошибку:
--- [SQLITE_ERROR] SQL error or missing database (cannot modify vacancies because it is a view)
+
